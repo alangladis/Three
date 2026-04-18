@@ -1,0 +1,310 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{font-family:'Playfair Display',Georgia,serif;color:#f5e0e8;background:#0a0106;border-radius:16px;overflow:hidden;width:100%;max-width:420px;margin:0 auto}
+canvas#c{display:block;width:100%;cursor:crosshair;border-radius:16px 16px 0 0}
+.divider{display:flex;align-items:center;gap:10px;padding:0 1.2rem;opacity:.4}
+.divider span{flex:1;height:.5px;background:rgba(220,140,170,.5)}
+.divider i{font-size:13px;color:#d48ca8;font-style:normal}
+.countdown-wrap{background:linear-gradient(180deg,#1a0510,#120308);padding:1.4rem 1rem;text-align:center}
+.countdown-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#a06080;margin-bottom:.9rem}
+.countdown-boxes{display:flex;justify-content:center;gap:8px}
+.cbox{background:rgba(180,40,80,.12);border:.5px solid rgba(200,80,110,.3);border-radius:10px;padding:.6rem .5rem;flex:1;max-width:72px;text-align:center}
+.cbox-num{font-size:clamp(1.3rem,5vw,1.9rem);font-weight:400;color:#f0c0d0;line-height:1}
+.cbox-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#905070;margin-top:3px}
+.hero-text{background:linear-gradient(180deg,#120308,#0e0208);text-align:center;padding:2rem 1.2rem}
+.hero-num{font-size:clamp(3rem,18vw,5rem);line-height:1;color:rgba(220,100,130,.8);font-weight:400}
+.hero-sub{font-size:clamp(.9rem,3.5vw,1.1rem);color:#c08090;margin-top:.4rem;font-style:italic;letter-spacing:.04em}
+.hero-date{font-size:clamp(.7rem,2.5vw,.85rem);letter-spacing:.15em;text-transform:uppercase;color:#805060;margin-top:.5rem}
+.timeline{background:#0e0208;padding:1.5rem 1.2rem}
+.tl-title{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#805060;text-align:center;margin-bottom:1.3rem}
+.tl-item{display:flex;gap:.85rem;margin-bottom:1.3rem;align-items:flex-start}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:rgba(180,40,80,.2);border:.5px solid rgba(200,80,110,.35);display:flex;align-items:center;justify-content:center;font-size:12px;color:#d08098;margin-top:2px}
+.tl-year{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#805060;margin-bottom:3px}
+.tl-text{font-size:clamp(.82rem,3vw,.95rem);color:#e0c0cc;line-height:1.65;font-style:italic}
+.food-section{background:#0c0109;padding:1.5rem 1.2rem}
+.food-title{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#805060;text-align:center;margin-bottom:1.2rem}
+.food-category{margin-bottom:1.1rem}
+.food-cat-label{display:flex;align-items:center;gap:8px;margin-bottom:.7rem}
+.food-cat-label span{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#7a4055;white-space:nowrap}
+.food-cat-label::before,.food-cat-label::after{content:'';flex:1;height:.5px;background:rgba(180,60,90,.2)}
+.food-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.food-card{background:rgba(160,30,60,.1);border:.5px solid rgba(190,70,100,.2);border-radius:10px;padding:.75rem .7rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.3rem}
+.food-card.wide{grid-column:1/-1;flex-direction:row;text-align:left;gap:.8rem;align-items:flex-start}
+.food-card.wide .food-right{flex:1}
+.food-card.wide .food-emoji{font-size:2rem;flex-shrink:0;margin-top:.15rem}
+.food-emoji{font-size:1.4rem}
+.food-name{font-size:clamp(.78rem,3vw,.88rem);color:#e8c0cc;font-weight:500;line-height:1.3}
+.food-desc{font-size:clamp(.65rem,2.4vw,.72rem);color:#a07080;font-style:italic;line-height:1.45}
+.food-place{font-size:.58rem;letter-spacing:.1em;color:#806070;margin-top:.1rem}
+.food-tag{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:20px;margin-top:.15rem;display:inline-block}
+.tag-street{background:rgba(200,80,40,.15);color:#d08060;border:.5px solid rgba(200,80,40,.25)}
+.tag-hotel{background:rgba(180,120,40,.15);color:#c0a050;border:.5px solid rgba(180,120,40,.25)}
+.tag-vintage{background:rgba(80,60,160,.18);color:#a090d0;border:.5px solid rgba(100,80,180,.25)}
+.tag-veg{background:rgba(40,130,70,.18);color:#70c090;border:.5px solid rgba(40,130,70,.28)}
+.food-footer{text-align:center;margin-top:1rem;font-size:clamp(.78rem,2.8vw,.88rem);color:#a06070;font-style:italic;line-height:1.7}
+.notes{background:#0e0208;padding:0 1.2rem 1.5rem}
+.notes-title{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#805060;text-align:center;padding-top:1.5rem;margin-bottom:1.1rem}
+.note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.note-card{background:rgba(180,40,80,.09);border:.5px solid rgba(200,80,110,.22);border-radius:10px;padding:.85rem .7rem;text-align:center}
+.note-icon{font-size:1.1rem;margin-bottom:.35rem}
+.note-text{font-size:clamp(.72rem,2.5vw,.8rem);color:#c09098;line-height:1.5;font-style:italic}
+.quote-wrap{background:linear-gradient(180deg,#0e0208,#0a0106);padding:1.5rem 1.2rem;text-align:center}
+.big-quote{font-size:clamp(.9rem,3.5vw,1.1rem);color:#d8a0b8;line-height:1.75;font-style:italic;max-width:320px;margin:0 auto}
+.big-quote::before{content:'\201C';font-size:2.5rem;line-height:.5;color:rgba(200,80,110,.3);display:block;margin-bottom:.4rem}
+.quote-attr{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#6a3850;margin-top:.9rem}
+.wish{background:#0a0106;padding:1.5rem 1.2rem;text-align:center}
+.wish-main{font-size:clamp(1rem,4vw,1.3rem);color:#e8c0d0;font-style:italic;margin-bottom:.4rem}
+.wish-sub{font-size:clamp(.7rem,2.5vw,.8rem);color:#804860;letter-spacing:.08em}
+.hearts-row{font-size:.9rem;color:rgba(220,80,110,.5);margin-top:.7rem;letter-spacing:.3em}
+/* NEW sections */
+.new-section{background:#0d0209;padding:1.5rem 1.2rem}
+.new-title{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#805060;text-align:center;margin-bottom:1.2rem}
+.habit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:1rem}
+.habit-card{background:rgba(140,30,60,.1);border:.5px solid rgba(180,60,100,.2);border-radius:10px;padding:.85rem .75rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.35rem}
+.habit-card.full{grid-column:1/-1;flex-direction:row;text-align:left;gap:.9rem;align-items:flex-start}
+.habit-card.full .h-icon{font-size:1.8rem;flex-shrink:0}
+.habit-card.full .h-body{flex:1}
+.h-icon{font-size:1.3rem}
+.h-name{font-size:clamp(.78rem,3vw,.9rem);color:#ecc0cc;font-weight:500;line-height:1.3}
+.h-desc{font-size:clamp(.65rem,2.4vw,.73rem);color:#a07080;font-style:italic;line-height:1.5}
+.steamy-section{background:#0a0106;padding:1.5rem 1.2rem;text-align:center}
+.steamy-box{background:rgba(160,30,70,.12);border:.5px solid rgba(200,70,100,.25);border-radius:14px;padding:1.2rem 1rem;margin-bottom:.8rem}
+.steamy-text{font-size:clamp(.88rem,3.5vw,1rem);color:#e0b0c0;font-style:italic;line-height:1.75}
+.steamy-note{font-size:clamp(.7rem,2.5vw,.78rem);color:#805060;letter-spacing:.06em;margin-top:.5rem}
+.gratitude-section{background:#0e0208;padding:1.5rem 1.2rem;text-align:center}
+.gratitude-inner{max-width:340px;margin:0 auto}
+.gratitude-text{font-size:clamp(.92rem,3.5vw,1.05rem);color:#d8b0c0;font-style:italic;line-height:1.8}
+.gratitude-sub{font-size:clamp(.7rem,2.5vw,.8rem);color:#8a5065;letter-spacing:.07em;margin-top:.6rem}
+</style>
+
+<div class="wrap">
+<canvas id="c"></canvas>
+
+<div class="countdown-wrap">
+  <div class="countdown-label">counting down to april 19</div>
+  <div class="countdown-boxes">
+    <div class="cbox"><div class="cbox-num" id="cd-d">—</div><div class="cbox-lbl">days</div></div>
+    <div class="cbox"><div class="cbox-num" id="cd-h">—</div><div class="cbox-lbl">hours</div></div>
+    <div class="cbox"><div class="cbox-num" id="cd-m">—</div><div class="cbox-lbl">mins</div></div>
+    <div class="cbox"><div class="cbox-num" id="cd-s">—</div><div class="cbox-lbl">secs</div></div>
+  </div>
+</div>
+
+<div class="hero-text">
+  <div class="hero-num">III</div>
+  <div class="hero-sub">years of loving you</div>
+  <div class="hero-date">April 19, 2022 — April 19, 2025</div>
+</div>
+
+<div class="divider"><span></span><i>✦</i><span></span></div>
+
+<div class="timeline">
+  <div class="tl-title">three chapters</div>
+  <div class="tl-item">
+    <div class="tl-dot">I</div>
+    <div class="tl-body">
+      <div class="tl-year">Year one · 2022</div>
+      <div class="tl-text">The beginning — nervous smiles, first adventures, learning the shape of each other's world. Everything felt like a discovery.</div>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot">II</div>
+    <div class="tl-body">
+      <div class="tl-year">Year two · 2023</div>
+      <div class="tl-text">The deepening — choosing each other through the hard days. Finding that love isn't just the feeling, it's the decision made over and over.</div>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot">III</div>
+    <div class="tl-body">
+      <div class="tl-year">Year three · 2024 – 2025</div>
+      <div class="tl-text">The settling in — comfortable silences, shared jokes, a life that has your fingerprints all over it. Home isn't a place anymore.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><span></span><i>✦</i><span></span></div>
+
+<!-- NEW: Good Habits & Life Together -->
+<div class="new-section">
+  <div class="new-title">the life we're building 🌱</div>
+  <div class="habit-grid">
+    <div class="habit-card">
+      <div class="h-icon">🥗</div>
+      <div class="h-name">Eating well, feeling well</div>
+      <div class="h-desc">Good food, good health — choosing nourishment over neglect, together</div>
+    </div>
+    <div class="habit-card">
+      <div class="h-icon">🏃</div>
+      <div class="h-name">Moving our bodies</div>
+      <div class="h-desc">Walking, stretching, breathing — small rituals that add up to a longer us</div>
+    </div>
+    <div class="habit-card full">
+      <div class="h-icon">🛍️</div>
+      <div class="h-body">
+        <div class="h-name">Buying what we actually need — when we need it</div>
+        <div class="h-desc">No more waiting forever, no more putting it off. If it's good for us, if it makes our days a little better — we get it. We deserve that. You deserve that.</div>
+      </div>
+    </div>
+    <div class="habit-card full">
+      <div class="h-icon">✈️</div>
+      <div class="h-body">
+        <div class="h-name">Places we've been dreaming of</div>
+        <div class="h-desc">The hill stations. The backwaters. The cities we've only seen in reels. We're done just dreaming — we're going. One trip at a time, hand in hand.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><span></span><i>✦</i><span></span></div>
+
+<div class="food-section">
+  <div class="food-title">our kerala table 🌴</div>
+
+  <div class="food-category">
+    <div class="food-cat-label"><span>from the streets</span></div>
+    <div class="food-cards">
+      <div class="food-card">
+        <div class="food-emoji">🥩</div>
+        <div class="food-name">Beef & Porotta</div>
+        <div class="food-desc">Late-night street corners, greasy hands, the best bites of our lives</div>
+        <div class="food-tag tag-street">street</div>
+      </div>
+      <div class="food-card">
+        <div class="food-emoji">🦆</div>
+        <div class="food-name">Dosa & Tharavu Curry</div>
+        <div class="food-desc">Crisp golden dosa dipped into rich slow-cooked duck gravy</div>
+        <div class="food-tag tag-street">street</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="food-category">
+    <div class="food-cat-label"><span>from the famous hotels</span></div>
+    <div class="food-cards">
+      <div class="food-card">
+        <div class="food-emoji">🍗</div>
+        <div class="food-name">Chicken Mandi</div>
+        <div class="food-desc">Smoky, slow-roasted perfection — the kind you dress up for</div>
+        <div class="food-tag tag-hotel">hotel</div>
+      </div>
+      <div class="food-card">
+        <div class="food-emoji">🍚</div>
+        <div class="food-name">Kerala Biriyani</div>
+        <div class="food-desc">Fragrant Kaima rice, whole spices, a bowl of raita on the side</div>
+        <div class="food-tag tag-hotel">hotel</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="food-category">
+    <div class="food-cat-label"><span>from the vintage hotels</span></div>
+    <div class="food-cards">
+      <div class="food-card wide">
+        <div class="food-emoji">🐑</div>
+        <div class="food-right">
+          <div class="food-name">Mutton — the vintage way</div>
+          <div class="food-desc">Old tiled floors, ceiling fans turning slow, and mutton that tastes like it's been cooking since morning. Some meals are a memory before you finish eating them.</div>
+          <div class="food-tag tag-vintage">vintage hotel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="food-category">
+    <div class="food-cat-label"><span>Mother's Veg Plaza</span></div>
+    <div class="food-cards">
+      <div class="food-card wide">
+        <div class="food-emoji">🍃</div>
+        <div class="food-right">
+          <div class="food-name">Sadya on Banana Leaf</div>
+          <div class="food-desc">Rice mounded in the centre, little portions of avial, olan, thoran, sambar, rasam, payasam arranged just so — each one a different world on the same leaf. The most honest meal Kerala knows.</div>
+          <div class="food-place">Mother's Veg Plaza</div>
+          <div class="food-tag tag-veg">veg restaurant</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="food-footer">Every meal a moment. Every bite, shared with you.</div>
+</div>
+
+<div class="divider"><span></span><i>✦</i><span></span></div>
+
+<!-- NEW: Steamy / Intimate -->
+<div class="steamy-section">
+  <div class="new-title" style="text-align:center;margin-bottom:1rem">just between us 🕯️</div>
+  <div class="steamy-box">
+    <div class="steamy-text">The way you look at me when no one else is watching. The warmth of your skin against mine on a quiet night. How easily everything else disappears when it's just us, close and unhurried — like the whole world agreed to give us this one moment.</div>
+  </div>
+  <div class="steamy-box" style="margin-bottom:0">
+    <div class="steamy-text">Three years and you still make my breath catch. I hope you always know how much I want you — not just in the big romantic moments, but in all the small, soft, secret ones too.</div>
+  </div>
+  <div class="steamy-note" style="margin-top:.9rem;font-style:italic">forever yours, in every way ♥</div>
+</div>
+
+<div class="divider"><span></span><i>✦</i><span></span></div>
+
+<!-- NEW: Gratitude & Health -->
+<div class="gratitude-section">
+  <div class="new-title">so glad you're okay 🌸</div>
+  <div class="gratitude-inner">
+    <div class="gratitude-text">I am so happy you are healthy and doing well. That matters more to me than anything. Be happy always — you deserve every bit of light that comes your way. And thank you. For being the best thing in my life, every single day.</div>
+    <div class="gratitude-sub">with my whole heart · always</div>
+  </div>
+</div>
+
+<div class="divider"><span></span><i>✦</i><span></span></div>
+
+<div class="notes">
+  <div class="notes-title">a few reasons</div>
+  <div class="note-grid">
+    <div class="note-card"><div class="note-icon">🌙</div><div class="note-text">You make ordinary nights feel like something worth remembering</div></div>
+    <div class="note-card"><div class="note-icon">🌹</div><div class="note-text">Your laugh is the best sound in any room</div></div>
+    <div class="note-card"><div class="note-icon">✨</div><div class="note-text">You see the best in people — especially me</div></div>
+    <div class="note-card"><div class="note-icon">🕯️</div><div class="note-text">Even the quiet moments feel full when you're in them</div></div>
+    <div class="note-card"><div class="note-icon">🍂</div><div class="note-text">Three years in and I'm still choosing you every single day</div></div>
+    <div class="note-card"><div class="note-icon">💌</div><div class="note-text">You are my favourite story — and we're still writing it</div></div>
+  </div>
+</div>
+
+<div class="divider"><span></span><i>✦</i><span></span></div>
+
+<div class="quote-wrap">
+  <div class="big-quote">I love you not only for what you are, but for what I am when I am with you.</div>
+  <div class="quote-attr">— Elizabeth Barrett Browning</div>
+</div>
+
+<div class="wish">
+  <div class="wish-main">Happy 3rd Anniversary, my love</div>
+  <div class="wish-sub">April 19th</div>
+  <div class="hearts-row">♥ ♥ ♥</div>
+</div>
+</div>
+
+<script>
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H;
+function getW(){return canvas.parentElement?canvas.parentElement.getBoundingClientRect().width||canvas.offsetWidth||360:360}
+function resize(){const w=getW(),dpr=window.devicePixelRatio||1;W=Math.round(w*dpr);H=Math.round(w*0.82*dpr);canvas.width=W;canvas.height=H;canvas.style.width=w+'px';canvas.style.height=Math.round(w*0.82)+'px'}
+resize();setTimeout(resize,120);
+const stars=[];for(let i=0;i<180;i++)stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.3+0.3,phase:Math.random()*Math.PI*2});
+function drawRose(c,x,y,s,h){c.save();c.translate(x,y);for(let i=0;i<5;i++){c.save();c.rotate((i/5)*Math.PI*2);c.beginPath();c.ellipse(0,-s*.5,s*.38,s*.52,0,0,Math.PI*2);c.fillStyle='hsl('+h+',80%,38%)';c.fill();c.restore()}c.beginPath();c.arc(0,0,s*.28,0,Math.PI*2);c.fillStyle='hsl('+h+',70%,28%)';c.fill();c.beginPath();c.moveTo(0,s*.35);c.lineTo(0,s*1.1);c.strokeStyle='#2a5a2a';c.lineWidth=s*.12;c.stroke();c.restore()}
+function drawBlossom(c,x,y,s,h){c.save();c.translate(x,y);for(let i=0;i<5;i++){c.save();c.rotate((i/5)*Math.PI*2);c.beginPath();c.ellipse(0,-s*.42,s*.26,s*.44,0,0,Math.PI*2);c.fillStyle='hsla('+h+',55%,72%,0.9)';c.fill();c.restore()}c.beginPath();c.arc(0,0,s*.22,0,Math.PI*2);c.fillStyle='hsl('+(h+10)+',40%,80%)';c.fill();c.restore()}
+function drawPuff(c,x,y,s,h){c.save();c.translate(x,y);for(let i=0;i<18;i++){const a=(i/18)*Math.PI*2,l=s*.78;c.beginPath();c.moveTo(0,0);c.lineTo(Math.cos(a)*l,Math.sin(a)*l);c.strokeStyle='hsla('+h+',35%,78%,0.7)';c.lineWidth=s*.04;c.stroke();c.beginPath();c.arc(Math.cos(a)*l,Math.sin(a)*l,s*.09,0,Math.PI*2);c.fillStyle='hsla('+h+',30%,82%,0.8)';c.fill()}c.restore()}
+const FT=[(c,x,y,s)=>drawRose(c,x,y,s,0),(c,x,y,s)=>drawRose(c,x,y,s,350),(c,x,y,s)=>drawBlossom(c,x,y,s,310),(c,x,y,s)=>drawBlossom(c,x,y,s,290),(c,x,y,s)=>drawPuff(c,x,y,s,290),(c,x,y,s)=>drawBlossom(c,x,y,s,30),(c,x,y,s)=>drawRose(c,x,y,s,15)];
+const flowers=[];for(let i=0;i<20;i++)flowers.push({x:Math.random(),y:Math.random(),s:Math.random()*.03+.014,vx:(Math.random()-.5)*.00018,vy:(Math.random()-.5)*.00014,rot:Math.random()*Math.PI*2,vrot:(Math.random()-.5)*.006,type:Math.floor(Math.random()*FT.length),phase:Math.random()*Math.PI*2});
+const floatHearts=[];
+canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1,px=(e.clientX-r.left)*dpr,py=(e.clientY-r.top)*dpr;for(let i=0;i<5;i++)floatHearts.push({x:px/W,y:py/H,s:Math.random()*.02+.01,vx:(Math.random()-.5)*.0006,vy:-Math.random()*.0006-.0003,a:1,phase:Math.random()*Math.PI*2,hue:Math.random()*30+340});flowers.push({x:px/W,y:py/H,s:Math.random()*.03+.018,vx:(Math.random()-.5)*.0003,vy:(Math.random()-.5)*.0002,rot:Math.random()*Math.PI*2,vrot:(Math.random()-.5)*.008,type:Math.floor(Math.random()*FT.length),phase:Math.random()*Math.PI*2});if(flowers.length>32)flowers.shift()});
+let t=0;
+function draw(){t+=.012;const g=ctx.createRadialGradient(W*.4,H*.15,0,W*.5,H*.5,H*.9);g.addColorStop(0,'#3a0a1e');g.addColorStop(.4,'#240613');g.addColorStop(1,'#0a0208');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);for(const s of stars){const a=.25+.75*(.5+.5*Math.sin(t*1.5+s.phase));ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r*(window.devicePixelRatio||1),0,Math.PI*2);ctx.fillStyle='rgba(255,245,235,'+a+')';ctx.fill()}for(const f of flowers){f.x+=f.vx+Math.sin(t*.7+f.phase)*.00008;f.y+=f.vy+Math.cos(t*.5+f.phase)*.00006;f.rot+=f.vrot;if(f.x<-.1)f.x=1.1;if(f.x>1.1)f.x=-.1;if(f.y<-.1)f.y=1.1;if(f.y>1.1)f.y=-.1;ctx.save();ctx.translate(f.x*W,f.y*H);ctx.rotate(f.rot);FT[f.type](ctx,0,0,f.s*Math.min(W,H));ctx.restore()}const pulse=.92+.08*Math.sin(t*1.8),hs=Math.min(W,H)*.09*pulse,cx=W*.5,cy=H*.45;ctx.save();ctx.globalAlpha=.8;ctx.translate(cx,cy);ctx.beginPath();ctx.moveTo(0,hs*.3);ctx.bezierCurveTo(-hs,-hs*.3,-hs,-hs*1.1,0,-hs*.5);ctx.bezierCurveTo(hs,-hs*1.1,hs,-hs*.3,0,hs*.3);ctx.closePath();const hg=ctx.createRadialGradient(0,-hs*.1,hs*.1,0,0,hs);hg.addColorStop(0,'rgba(220,60,90,0.9)');hg.addColorStop(1,'rgba(100,5,20,0.0)');ctx.fillStyle=hg;ctx.fill();ctx.restore();ctx.save();ctx.font='400 '+Math.min(W,H)*.055+'px Georgia,serif';ctx.fillStyle='rgba(255,220,230,0.9)';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('3',cx,cy-hs*.05);ctx.restore();for(let i=floatHearts.length-1;i>=0;i--){const h=floatHearts[i];h.x+=h.vx+Math.sin(t*.8+h.phase)*.0002;h.y+=h.vy;h.a-=.005;if(h.a<=0||h.y<-.05){floatHearts.splice(i,1);continue}ctx.save();ctx.globalAlpha=h.a;ctx.translate(h.x*W,h.y*H);const hs2=h.s*Math.min(W,H);ctx.beginPath();ctx.moveTo(0,hs2*.3);ctx.bezierCurveTo(-hs2,-hs2*.3,-hs2,-hs2*1.1,0,-hs2*.5);ctx.bezierCurveTo(hs2,-hs2*1.1,hs2,-hs2*.3,0,hs2*.3);ctx.closePath();ctx.fillStyle='hsl('+h.hue+',75%,60%)';ctx.fill();ctx.restore()}requestAnimationFrame(draw)}
+draw();
+try{const ro=new ResizeObserver(()=>resize());ro.observe(canvas.parentElement||canvas)}catch(e){}
+window.addEventListener('resize',resize);
+function tick(){const now=new Date(),target=new Date('2026-04-19T00:00:00'),diff=Math.max(0,target-now),d=Math.floor(diff/864e5),h=Math.floor((diff%864e5)/36e5),m=Math.floor((diff%36e5)/6e4),s=Math.floor((diff%6e4)/1e3);document.getElementById('cd-d').textContent=String(d).padStart(2,'0');document.getElementById('cd-h').textContent=String(h).padStart(2,'0');document.getElementById('cd-m').textContent=String(m).padStart(2,'0');document.getElementById('cd-s').textContent=String(s).padStart(2,'0');setTimeout(tick,1000)}
+tick();
+</script>
